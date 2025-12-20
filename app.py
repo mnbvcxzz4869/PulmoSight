@@ -58,9 +58,6 @@ Your primary function is to screen for Pulmonary Tuberculosis (TB) signatures be
 [PRIMARY CLINICAL PRIORITY]
 Pulmonary Tuberculosis (TB) screening MUST be explicitly evaluated first.
 
-[CLINICAL CONTEXT]
-{context}
-
 [TASK DEFINITION]
 Using the provided chest X-ray image:
 1. Systematically assess radiographic features associated with pulmonary TB, explicitly stating their presence or absence.
@@ -124,30 +121,18 @@ if "image_report" not in st.session_state:
 if "last_file_id" not in st.session_state:
     st.session_state.last_file_id = None
 
-# Context Builder
-def build_model_context(max_turns=6):
-    msgs = st.session_state.messages[-max_turns * 2:]
-    lines = []
-    for m in msgs:
-        role = "Clinician" if m["role"] == "user" else "Assistant"
-        lines.append(f"{role}: {m['content']}")
-    if st.session_state.image_report:
-        lines.append("Assistant (Image Report):")
-        lines.append(st.session_state.image_report)
-    return "\n".join(lines) if lines else "No prior clinical information."
-
 # Image Analysis
 def analyze_image(image):
-    context = build_model_context()
-    prompt = IMAGE_CDSS_PROMPT.format(context=context)
-
     convo = [{
         "role": "user",
         "content": [{"type": "image"}, {"type": "text", "text": "Analyze this chest X-ray."}]
     }]
 
     chat = processor.apply_chat_template(
-        convo, tokenize=False, add_generation_prompt=True, system_prompt=prompt
+        convo,
+        tokenize=False,
+        add_generation_prompt=True,
+        system_prompt=IMAGE_CDSS_PROMPT
     )
 
     inputs = processor(text=chat, images=image, return_tensors="pt").to(device)
@@ -155,27 +140,42 @@ def analyze_image(image):
     with torch.no_grad():
         output = model.generate(**inputs, max_new_tokens=1200)
 
-    return processor.decode(output[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+    return processor.decode(
+        output[0][inputs.input_ids.shape[1]:],
+        skip_special_tokens=True
+    )
 
 # Side Bar
 with st.sidebar:
-    st.title("📁 Upload Chest X-ray")
+    st.title("📁 Chest X-ray Screening")
+
     uploaded = st.file_uploader("Upload Chest X-ray", type=["png", "jpg", "jpeg"])
+
     if uploaded:
         file_id = f"{uploaded.name}-{uploaded.size}"
+
         if st.session_state.last_file_id != file_id:
             st.session_state.current_image = Image.open(uploaded).convert("RGB")
-            st.session_state.image_report = None
+            status_placeholder = st.empty()
+            status_placeholder.markdown("🩻 Analyzing X-ray...")
+            try:
+                st.session_state.image_report = analyze_image(st.session_state.current_image)
+            finally:
+                status_placeholder.empty()
             st.session_state.last_file_id = file_id
 
         st.image(st.session_state.current_image, use_container_width=True)
         st.caption(uploaded.name)
 
+        st.markdown("### 🩻 Radiology Report")
+        st.markdown(st.session_state.image_report)
+
+        if device == "cuda":
+            torch.cuda.empty_cache()
+        gc.collect()
+
     if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
-        st.session_state.image_report = None
-        st.session_state.current_image = None
-        st.session_state.last_file_id = None
 
 # Chat History
 for m in st.session_state.messages:
@@ -183,38 +183,33 @@ for m in st.session_state.messages:
         st.markdown(m["content"])
 
 # User Input
-user_input = st.chat_input("Type clinical question...")
+user_input = st.chat_input("Ask a clinical question...")
 
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # If image exists and has not been analyzed yet → run IMAGE_CDSS_PROMPT first
-    if st.session_state.current_image and st.session_state.image_report is None:
-        with st.chat_message("assistant"):
-            with st.spinner("🩻 Analyzing chest X-ray..."):
-                try:
-                    report = analyze_image(st.session_state.current_image)
-                    st.session_state.image_report = report
-                    st.markdown(report)
-                    st.session_state.messages.append({
-                        "role": "assistant",
-                        "content": f"## 🩻 Chest X-ray Analysis\n\n{report}"
-                    })
-                finally:
-                    if device == "cuda":
-                        torch.cuda.empty_cache()
-                    gc.collect()
-
-    # Then process user input with TEXT_CDSS_PROMPT
     with st.chat_message("assistant"):
         with st.spinner("🧠 Thinking..."):
-            context = build_model_context()
-            text_prompt = TEXT_CDSS_PROMPT.format(context=context)
+            context_parts = []
 
-            convo = [{"role": "system", "content": text_prompt}]
-            convo.append({"role": "user", "content": [{"type": "text", "text": user_input}]})
+            if st.session_state.image_report:
+                context_parts.append("Radiology Report:")
+                context_parts.append(st.session_state.image_report)
+
+            for m in st.session_state.messages[-6:]:
+                role = "Clinician" if m["role"] == "user" else "Assistant"
+                context_parts.append(f"{role}: {m['content']}")
+
+            context = "\n".join(context_parts) if context_parts else "No prior clinical data."
+
+            prompt = TEXT_CDSS_PROMPT.format(context=context)
+
+            convo = [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": [{"type": "text", "text": user_input}]}
+            ]
 
             chat = processor.apply_chat_template(convo, tokenize=False, add_generation_prompt=True)
             inputs = processor(text=chat, return_tensors="pt").to(device)
@@ -223,7 +218,8 @@ if user_input:
                 output = model.generate(**inputs, max_new_tokens=1200)
 
             response = processor.decode(
-                output[0][inputs.input_ids.shape[1]:], skip_special_tokens=True
+                output[0][inputs.input_ids.shape[1]:],
+                skip_special_tokens=True
             )
 
             st.markdown(response)
