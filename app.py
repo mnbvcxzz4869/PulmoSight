@@ -82,6 +82,7 @@ Provide a structured radiological report with the following sections:
 - **Mediastinum and Cardiac Silhouette:** (Assess size and contours).
 - **Pleural Spaces:** (Check for effusions or thickening).
 - **Other Possible Etiologies:** (If not TB, suggest what other pathology the patterns resemble).
+- **Summary and Recommendations:** (Summarize key findings, emphasize TB screening results, and recommend next steps for clinical correlation and further testing).
 """
 
 # Load Model
@@ -123,16 +124,18 @@ if "last_file_id" not in st.session_state:
 
 # Image Analysis
 def analyze_image(image):
-    convo = [{
-        "role": "user",
-        "content": [{"type": "image"}, {"type": "text", "text": "Analyze this chest X-ray."}]
-    }]
+    convo = [
+        {"role": "system", "content": IMAGE_CDSS_PROMPT},
+        {
+            "role": "user",
+            "content": [{"type": "image"}, {"type": "text", "text": "Analyze this chest X-ray."}]
+        }
+    ]
 
     chat = processor.apply_chat_template(
         convo,
         tokenize=False,
-        add_generation_prompt=True,
-        system_prompt=IMAGE_CDSS_PROMPT
+        add_generation_prompt=True
     )
 
     inputs = processor(text=chat, images=image, return_tensors="pt").to(device)
@@ -156,12 +159,8 @@ with st.sidebar:
 
         if st.session_state.last_file_id != file_id:
             st.session_state.current_image = Image.open(uploaded).convert("RGB")
-            status_placeholder = st.empty()
-            status_placeholder.markdown("🩻 Analyzing X-ray...")
-            try:
+            with st.spinner("🩻 Analyzing X-ray..."):
                 st.session_state.image_report = analyze_image(st.session_state.current_image)
-            finally:
-                status_placeholder.empty()
             st.session_state.last_file_id = file_id
 
         st.image(st.session_state.current_image, use_container_width=True)
