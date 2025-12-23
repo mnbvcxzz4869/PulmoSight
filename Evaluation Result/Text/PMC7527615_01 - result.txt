@@ -1,0 +1,21 @@
+Given the patient's age, the gradual onset of a firm, non-tender swelling of the left anterior chest wall with nipple-areolar complex elevation, and the lack of acute symptoms, a chronic chest wall mass is a reasonable consideration. While the initial imaging suggested a cystic lesion, the description of "structural involvement" is more concerning for a solid mass.
+
+The differential diagnosis includes inflammatory, developmental, or neoplastic processes. The lack of pain, fever, weight loss, or night sweats makes infectious etiologies like TB less likely, but it does not rule them out entirely.
+
+Given the patient's age and the lack of infectious symptoms, TB is less likely than other possibilities. However, TB should be considered, especially in endemic areas.
+
+Next Steps:
+
+Further Imaging: A more detailed imaging study, such as a CT scan of the chest with contrast, is warranted to better characterize the lesion and assess for any associated findings. This will help differentiate between a benign, inflammatory, or neoplastic process.
+Consider Tuberculosis: Although less likely, TB should be considered, especially if the patient has any risk factors (e.g., exposure to TB, immunocompromised state). A tuberculin skin test (TST) or interferon-gamma release assay (IGRA) may be considered, although the yield may be low in children.
+Biopsy: If the imaging is inconclusive or if there is a high suspicion for malignancy, a biopsy may be necessary to establish a definitive diagnosis.
+Important Considerations:
+
+The patient's history of previous reassurance for a "benign breast enlargement" should be taken into account.
+The lack of respiratory symptoms makes a primary pulmonary TB less likely, but it should still be considered.
+The differential diagnosis is broad and requires a comprehensive evaluation.
+Conclusion:
+
+While TB is less likely given the patient's presentation, it should be considered in the differential diagnosis. Further imaging and potentially a biopsy may be necessary to establish a definitive diagnosis.
+
+PulmoSight recommends further investigation to determine the etiology of the chest wall mass.

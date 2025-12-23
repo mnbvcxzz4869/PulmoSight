@@ -1,0 +1,32 @@
+Tag: tuberculosis, headache, hearing loss, lymph node, nasal obstruction, nasopharyngeal disease, nasopharyngeal neoplasm, nasopharynx, treatment
+Case:
+
+Patient Information
+- Age: 17 years
+- Sex: Female
+- Family History: No known family history of tuberculosis
+
+Presenting Complaint
+- Bilateral neck swellings
+- Nasal obstruction
+
+History of Present Illness
+The patient presented with **multiple swellings on both sides of the neck**, noted over an unspecified period. These were associated with **nasal obstruction**. No additional symptoms were described.
+
+Physical Examination
+- Numerous **bilateral cervical lymph node enlargements** were noted on examination
+
+Endoscopic Findings
+- Nasal endoscopy revealed a **polypoid mass** arising from the **superior and posterior walls of the nasopharynx**
+
+Initial Imaging
+- Imaging of the head and neck demonstrated a **nasopharyngeal mass** with a central area of reduced density, suggestive of internal tissue changes
+- Multiple cervical lymph node enlargements were also observed
+
+Initial Diagnostic Step
+- A tissue biopsy of the lesion was performed
+
+Initial Clinical Impression
+- Nasopharyngeal mass with associated bilateral cervical lymphadenopathy of unclear etiology
+- Definitive diagnosis pending histopathological evaluation
+
