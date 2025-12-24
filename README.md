@@ -65,6 +65,7 @@ PulmoSight consists of three main components:
    - Integrates multimodal context consistently  
 
 3. **Prompt & Context Management**
+
    PulmoSight uses **different prompts** depending on input modality:
    - **Image-Based Prompt**
      - Automatically triggered when a chest X-ray is uploaded
