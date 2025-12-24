@@ -104,3 +104,10 @@ pip install -r requirements.txt
 ```bash
 streamlit run app.py
 ```
+
+## 👥 Development Team
+- Joyce Velensia       (2802412004)
+- Kisusherly Annelise  (2802393762)
+- Jennifer Gwen Tanadi (2802390470)
+
+
