@@ -64,26 +64,14 @@ PulmoSight consists of three main components:
    - Performs chest X-ray analysis and clinical reasoning  
    - Integrates multimodal context consistently  
 
-3. **Prompt & Context Management**  
-   - Separate prompts for image-based and text-based inputs  
-   - Ensures TB screening is prioritized  
-   - Outputs are probabilistic and clinically cautious  
-
----
-
-## 🧩 Prompt Design
-
-PulmoSight uses **different prompts** depending on input modality:
-
-- **Image-Based Prompt**
-  - Automatically triggered when a chest X-ray is uploaded
-  - Focused on TB screening and radiological patterns
-
-- **Text-Based Prompt**
-  - Used during QnA interactions
-  - Incorporates image analysis results as conversational context
-
-This design ensures consistent, safe, and clinically aligned system behavior.
+3. **Prompt & Context Management**
+   PulmoSight uses **different prompts** depending on input modality:
+   - **Image-Based Prompt**
+     - Automatically triggered when a chest X-ray is uploaded
+     - Focused on TB screening and radiological patterns
+   - **Text-Based Prompt**
+     - Used during QnA interactions
+     - Incorporates image analysis results as conversational context
 
 ---
 
