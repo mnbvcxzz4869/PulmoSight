@@ -34,18 +34,13 @@ The system is designed to:
 - General clinical knowledge of the language model is preserved
 - Implemented using **Low-Rank Adaptation (LoRA)**
 
-### Objectives of LoRA Fine-Tuning
-- Reduce computational resource requirements
-- Prevent overfitting
-- Maintain stability of the base model
-
 ---
 
 ## 🏋️ Training Details
 
 - **Platform**: Google Colab  
 - **GPU**: NVIDIA A100  
-- **Dataset**: Chest X-ray Tuberculosis dataset  
+- **Dataset**: [Chest X-ray Tuberculosis Dataset (Kaggle)](https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset)
 
 📓 **Training Notebook**  
 https://colab.research.google.com/drive/1HGlNjgoMcmMG_XmztjDgN2msGy0rLUET?usp=sharing
